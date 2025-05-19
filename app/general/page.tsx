@@ -6,9 +6,10 @@ import GeneralSettings from "@/components/general/GeneralSettings";
 import {
   StatsCardSection,
   ActivePlansSection,
-  BillingsHistorySection,
+  TransactionsPage,
   InvoiceSection,
 } from "@/components/billings";
+import SecurityAndPrivacy from "@/components/security/SecurityAndPrivacy";
 
 export default function SettingsPage() {
   return (
@@ -46,16 +47,17 @@ export default function SettingsPage() {
           <TabsContent value="general" className="mt-0 ">
             <GeneralSettings />
           </TabsContent>
-          <TabsContent value="subscription" className="mt-0 bg-muted">
+          <TabsContent
+            value="subscription"
+            className="mt-0 bg-muted gap-[40px]"
+          >
             <StatsCardSection />
             <ActivePlansSection />
-            <BillingsHistorySection />
+            <TransactionsPage />
             <InvoiceSection />
           </TabsContent>
           <TabsContent value="security" className="mt-0">
-            <div className="py-10 flex items-center justify-center text-muted-foreground">
-              Security & Privacy content will go here
-            </div>
+            <SecurityAndPrivacy />
           </TabsContent>
         </div>
       </Tabs>

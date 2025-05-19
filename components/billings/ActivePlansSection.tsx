@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { Plus, MoreVertical } from "lucide-react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 import {
   Select,
   SelectContent,
@@ -52,7 +59,7 @@ export function ActivePlansSection() {
   const [country, setCountry] = useState("NGN");
   const [tiers, setTiers] = useState(initialTiers);
   const [modalOpen, setModalOpen] = useState(false);
-  const [menuOpenIdx, setMenuOpenIdx] = useState<number | null>(null);
+  const [editIdx, setEditIdx] = useState<number | null>(null);
 
   // Placeholder for form state
   const [form, setForm] = useState({
@@ -64,6 +71,13 @@ export function ActivePlansSection() {
     features: "",
     users: "0",
   });
+
+  const countryFlags: Record<string, string> = {
+    NGN: "/images/nigeria.png",
+    GH: "/images/ghana.png",
+    USA: "/images/usa.png",
+    KA: "/images/kenya.png",
+  };
 
   const handleAddTier = () => {
     setTiers([...tiers, { ...form }]);
@@ -81,23 +95,30 @@ export function ActivePlansSection() {
 
   const handleDelete = (idx: number) => {
     setTiers(tiers.filter((_, i) => i !== idx));
-    setMenuOpenIdx(null);
   };
 
   return (
-    <section className="my-8 text-[12px]">
+    <section className="my-8 px-4 py-8 text-[12px] w-[1135px]">
       <div className="flex justify-between items-center mb-4">
         <Select value={country} onValueChange={setCountry}>
           <SelectTrigger className="w-[160px] h-[48px] rounded-[12px] border-2 border-white shadow bg-white flex items-center gap-2">
-            {/* Add flag icon here if desired */}
-            <span className="w-6 h-6 bg-green-100 rounded mr-2 inline-block" />
+            <div>
+              {country && (
+                <Image
+                  src={countryFlags[country]}
+                  alt={country}
+                  width={34}
+                  height={17}
+                />
+              )}
+            </div>
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="NGN">Nigeria</SelectItem>
-            <SelectItem value="GH">Ghana</SelectItem>
-            <SelectItem value="USA">USA</SelectItem>
-            <SelectItem value="KA">Kenya</SelectItem>
+          <SelectContent className="rounded-[18px] p-[8px] ">
+            <SelectItem value="NGN"> Nigeria</SelectItem>
+            <SelectItem value="GH"> Ghana</SelectItem>
+            <SelectItem value="USA"> USA</SelectItem>
+            <SelectItem value="KA"> Kenya</SelectItem>
           </SelectContent>
         </Select>
         <Button
@@ -107,10 +128,10 @@ export function ActivePlansSection() {
           <Plus className="w-5 h-5 mr-2" /> Add new tier
         </Button>
       </div>
-      <div className="bg-white rounded-[24px] shadow p-6 overflow-x-auto">
+      <div className="bg-white rounded-[12px] border-none p-6 text-[12px]">
         <table className="min-w-full">
           <thead>
-            <tr className="text-muted-foreground text-[15px] font-semibold">
+            <tr className="text-muted-foreground text-[15px] font-normal">
               <th className="text-left py-2 px-4">PLAN TIERS</th>
               <th className="text-left py-2 px-4">CURRENCY</th>
               <th className="text-left py-2 px-4">MONTHLY PRICE</th>
@@ -123,7 +144,7 @@ export function ActivePlansSection() {
           </thead>
           <tbody>
             {tiers.map((tier, idx) => (
-              <tr key={idx} className="border-b last:border-0">
+              <tr key={idx} className="border-none last:border-0">
                 <td className="py-3 px-4 font-medium">{tier.plan}</td>
                 <td className="py-3 px-4">{tier.currency}</td>
                 <td className="py-3 px-4">{tier.monthly}</td>
@@ -134,33 +155,32 @@ export function ActivePlansSection() {
                   <span className="text-blue-600 cursor-pointer">see more</span>
                 </td>
                 <td className="py-3 px-4">
-                  <span className="bg-green-50 text-green-600 rounded-[8px] px-4 py-1 font-semibold shadow text-base inline-block border border-green-100">
+                  <span className="bg-green-50 text-green-600 rounded-[8px] px-4 py-1 font-semibold shadow text-[12px] inline-block border border-green-100">
                     {tier.users}
                   </span>
                 </td>
                 <td className="py-3 px-4 relative">
-                  <button
-                    onClick={() => setMenuOpenIdx(idx)}
-                    className="p-2 rounded-full hover:bg-gray-100"
-                  >
-                    <MoreVertical className="w-5 h-5" />
-                  </button>
-                  {menuOpenIdx === idx && (
-                    <div className="absolute right-0 mt-2 w-32 bg-white border rounded shadow-lg z-10">
-                      <button
-                        className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                        onClick={() => setModalOpen(true)}
-                      >
-                        Edit
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button className="p-2 rounded-[8px] hover:bg-gray-100">
+                        <MoreVertical className="w-5 h-5" />
                       </button>
-                      <button
-                        className="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      align="end"
+                      className="rounded-[18px] p-[8px] "
+                    >
+                      <DropdownMenuItem onClick={() => setModalOpen(true)}>
+                        Edit
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
                         onClick={() => handleDelete(idx)}
+                        className="text-red-600"
                       >
                         Delete
-                      </button>
-                    </div>
-                  )}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </td>
               </tr>
             ))}

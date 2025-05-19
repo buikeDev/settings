@@ -1,4 +1,4 @@
 export * from "./StatsCardSection";
 export * from "./ActivePlansSection";
-export * from "./BillingsHistorySection";
+export * from "./TransactionsPage";
 export * from "./InvoiceSection";

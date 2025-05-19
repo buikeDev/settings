@@ -4,7 +4,7 @@ import { Users } from "lucide-react";
 
 export function StatsCardSection() {
   return (
-    <section className="flex flex-wrap gap-4 my-8">
+    <section className="flex flex-wrap gap-[12px] my-8">
       <StatsCard
         title="Total active users"
         value="862"
