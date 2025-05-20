@@ -42,7 +42,7 @@ export default function ProfileSettingsSection({
         </Button>
       </div>
 
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 mt-4">
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 mt-4 text-[12px]">
         <ProfileItem label="Full name" value={profileData.fullName} />
         <ProfileItem label="Email address" value={profileData.email} />
         <ProfileItem label="Phone number" value={profileData.phone} />

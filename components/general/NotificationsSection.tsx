@@ -84,10 +84,10 @@ export default function NotificationsSection() {
   return (
     <div className="border-none p-6 space-y-4 flex gap-[73px]">
       <div className="w-[305px]">
-        <h2 className="text-sm font-bold uppercase tracking-wide text-black">
+        <h2 className="text-[12px] font-bold uppercase tracking-wide text-black">
           Notification Settings
         </h2>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-[12px] text-muted-foreground">
           Manage email alerts for key platform activities like email alerts,
           payments & billing issues.
         </p>
@@ -100,8 +100,8 @@ export default function NotificationsSection() {
             className="flex items-start justify-between"
           >
             <div className="space-y-1">
-              <p className="font-medium">{notification.title}</p>
-              <p className="text-sm text-muted-foreground">
+              <p className="font-blod text-[12px]">{notification.title}</p>
+              <p className="text-[12px] text-muted-foreground">
                 {notification.description}
               </p>
             </div>

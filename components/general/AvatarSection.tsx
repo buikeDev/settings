@@ -52,7 +52,7 @@ export default function AvatarSection() {
         <h2 className="text-sm font-semibold uppercase tracking-wide text-black">
           Avatar
         </h2>
-        <p className="text-[12px] text-[#717A84]">
+        <p className="text-[12px] text-[#717A84]-400">
           Update your profile photo to personalise your account
         </p>
       </div>

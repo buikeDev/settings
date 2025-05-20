@@ -15,7 +15,7 @@ export function StatsCard({
   iconBg: string;
 }) {
   return (
-    <div className="w-[371px] h-[122px] gap-[10px] rounded-[12px] pt-[15px] pr-[17px] pb-[15px] pl-[17px] shadow items-center bg-white ">
+    <div className="w-[370px] h-[122px] rounded-[12px] pt-[15px] pr-[17px] pb-[15px] pl-[17px] shadow items-center bg-white ">
       {/* Left: Icon and Stats */}
       <div className="flex items-center gap-4 flex justify-between">
         <span

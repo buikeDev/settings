@@ -13,10 +13,10 @@ import SecurityAndPrivacy from "@/components/security/SecurityAndPrivacy";
 
 export default function SettingsPage() {
   return (
-    <div className="w-full space-y-6 bg-muted">
+    <div className="w-[1135px] space-y-6 bg-muted">
       <Tabs defaultValue="general" className="w-full py-[5px]">
         <div className="overflow-x-auto pb-6">
-          <TabsList className="inline-flex h-[36px] items-center justify-center rounded-[12px] bg-background p-1">
+          <TabsList className="inline-flex h-[36px] items-center justify-center rounded-[12px] bg-background p-[5px]">
             <TabsTrigger
               value="general"
               className={cn(

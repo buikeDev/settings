@@ -68,8 +68,9 @@ export function ActivePlansSection() {
     monthly: "",
     annual: "",
     updated: new Date().toLocaleString(),
-    features: "",
+    features: [""], // Initialize with one empty feature
     users: "0",
+    country: "Nigeria",
   });
 
   const countryFlags: Record<string, string> = {
@@ -79,8 +80,40 @@ export function ActivePlansSection() {
     KA: "/images/kenya.png",
   };
 
+  const handleAddFeature = () => {
+    setForm((prev) => ({
+      ...prev,
+      features: [...prev.features, ""],
+    }));
+  };
+
+  const handleRemoveFeature = (index: number) => {
+    if (form.features.length > 1) {
+      setForm((prev) => ({
+        ...prev,
+        features: prev.features.filter((_, i) => i !== index),
+      }));
+    }
+  };
+
+  const handleFeatureChange = (index: number, value: string) => {
+    setForm((prev) => ({
+      ...prev,
+      features: prev.features.map((feature, i) =>
+        i === index ? value : feature
+      ),
+    }));
+  };
+
   const handleAddTier = () => {
-    setTiers([...tiers, { ...form }]);
+    // Validate that at least 3 features are filled
+    const validFeatures = form.features.filter((f) => f.trim() !== "");
+    if (validFeatures.length < 3) {
+      alert("Please add at least 3 features");
+      return;
+    }
+
+    setTiers([...tiers, { ...form, features: validFeatures.join(", ") }]);
     setModalOpen(false);
     setForm({
       plan: "",
@@ -88,8 +121,9 @@ export function ActivePlansSection() {
       monthly: "",
       annual: "",
       updated: new Date().toLocaleString(),
-      features: "",
+      features: [""],
       users: "0",
+      country: "Nigeria",
     });
   };
 
@@ -99,6 +133,7 @@ export function ActivePlansSection() {
 
   return (
     <section className="my-8 px-4 py-8 text-[12px] w-[1135px]">
+      <h2 className="font-bold text-[16px] my-8 ">YOUR ACTIVE PLANS</h2>
       <div className="flex justify-between items-center mb-4">
         <Select value={country} onValueChange={setCountry}>
           <SelectTrigger className="w-[160px] h-[48px] rounded-[12px] border-2 border-white shadow bg-white flex items-center gap-2">
@@ -131,7 +166,7 @@ export function ActivePlansSection() {
       <div className="bg-white rounded-[12px] border-none p-6 text-[12px]">
         <table className="min-w-full">
           <thead>
-            <tr className="text-muted-foreground text-[15px] font-normal">
+            <tr className="text-muted-foreground text-[12px] font-bold">
               <th className="text-left py-2 px-4">PLAN TIERS</th>
               <th className="text-left py-2 px-4">CURRENCY</th>
               <th className="text-left py-2 px-4">MONTHLY PRICE</th>
@@ -189,84 +224,139 @@ export function ActivePlansSection() {
       </div>
       {/* Modal for Add/Edit Tier */}
       {modalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white rounded-[16px] p-8 w-full max-w-lg shadow-lg relative">
-            <button
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
-              onClick={() => setModalOpen(false)}
-            >
-              ×
-            </button>
-            <h2 className="text-xl font-bold mb-4">Add New Tier</h2>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center backdrop-blur-sm z-50">
+          <div className="bg-white rounded-[16px] p-8 w-full max-w-[634px] max-h-[744px] shadow-lg relative flex flex-col">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-[16px] font-bold">Add a new tier</h2>
+              <button
+                className="text-gray-500 text-[24px] hover:text-gray-600"
+                onClick={() => setModalOpen(false)}
+              >
+                ×
+              </button>
+            </div>
+
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 handleAddTier();
               }}
-              className="flex flex-col gap-4"
+              className="space-y-6 overflow-y-auto pr-2 flex-1"
             >
-              <input
-                className="border rounded px-3 py-2"
-                placeholder="Plan Tiers"
-                value={form.plan}
-                onChange={(e) => setForm({ ...form, plan: e.target.value })}
-                required
-              />
-              <Select
-                value={form.currency}
-                onValueChange={(val) => setForm({ ...form, currency: val })}
-              >
-                <SelectTrigger className="border rounded px-3 py-2">
-                  <SelectValue placeholder="Currency" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="NGN">NGN</SelectItem>
-                  <SelectItem value="GH">GH</SelectItem>
-                  <SelectItem value="USA">USA</SelectItem>
-                  <SelectItem value="KA">KA</SelectItem>
-                </SelectContent>
-              </Select>
-              <input
-                className="border rounded px-3 py-2"
-                placeholder="Monthly Price"
-                value={form.monthly}
-                onChange={(e) => setForm({ ...form, monthly: e.target.value })}
-                required
-              />
-              <input
-                className="border rounded px-3 py-2"
-                placeholder="Annual Price"
-                value={form.annual}
-                onChange={(e) => setForm({ ...form, annual: e.target.value })}
-                required
-              />
-              <input
-                className="border rounded px-3 py-2"
-                placeholder="Last Updated"
-                value={form.updated}
-                onChange={(e) => setForm({ ...form, updated: e.target.value })}
-                required
-              />
-              <textarea
-                className="border rounded px-3 py-2"
-                placeholder="Features"
-                value={form.features}
-                onChange={(e) => setForm({ ...form, features: e.target.value })}
-                required
-              />
-              <input
-                className="border rounded px-3 py-2"
-                placeholder="Active Users"
-                value={form.users}
-                onChange={(e) => setForm({ ...form, users: e.target.value })}
-                required
-              />
-              <Button
-                type="submit"
-                className="bg-primary text-white rounded px-4 py-2 mt-2"
-              >
-                Add Tier
-              </Button>
+              {/* Tier Name */}
+              <div>
+                <label className="block text-sm font-bold text-black-700 mb-1">
+                  Tier name
+                </label>
+                <input
+                  className="w-full h-[50px] border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
+                  placeholder="Enter tier name (e.g., Starter, Pro, Plus)"
+                  value={form.plan}
+                  onChange={(e) => setForm({ ...form, plan: e.target.value })}
+                  required
+                />
+              </div>
+
+              {/* Pricing Section */}
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-bold text-black-700 mb-1">
+                    Monthly price
+                  </label>
+                  <div className="relative items-center">
+                    <span className="absolute left-3 top-3 text-gray-500">
+                      ₦
+                    </span>
+                    <input
+                      className="w-full border border-gray-300 rounded-lg px-3 py-3.5 pl-8 focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
+                      placeholder="0"
+                      value={form.monthly}
+                      onChange={(e) =>
+                        setForm({ ...form, monthly: e.target.value })
+                      }
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-bold text-black-700 mb-1">
+                    Annual price (Optional)
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-3 top-3 text-gray-500">
+                      ₦
+                    </span>
+                    <input
+                      className="w-full border border-gray-300 rounded-lg px-3 py-3.5 pl-8 focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
+                      placeholder="0"
+                      value={form.annual}
+                      onChange={(e) =>
+                        setForm({ ...form, annual: e.target.value })
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Features */}
+              <div>
+                <label className="block text-sm font-bold text-black-700 mb-1">
+                  Features
+                </label>
+                {form.features.map((feature, index) => (
+                  <div key={index} className="flex gap-2 mb-2">
+                    <input
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-200 focus:border-blue-500"
+                      placeholder={`Feature ${index + 1}`}
+                      value={feature}
+                      onChange={(e) =>
+                        handleFeatureChange(index, e.target.value)
+                      }
+                      required
+                    />
+                    {form.features.length > 1 && (
+                      <button
+                        type="button"
+                        className="text-red-500 hover:text-red-700"
+                        onClick={() => handleRemoveFeature(index)}
+                      >
+                        ×
+                      </button>
+                    )}
+                  </div>
+                ))}
+                <div className="flex justify-between">
+                  <p className="text-xs text-gray-500">
+                    You must add at least 3 features
+                  </p>
+                  <button
+                    type="button"
+                    className="flex items-center text-blue-600 text-sm"
+                    onClick={handleAddFeature}
+                  >
+                    <span className="text-lg">+</span> Add more features
+                  </button>
+                </div>
+              </div>
+
+              {/* Form Actions */}
+              <div className="flex w-full justify-between gap-3 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="px-6 py-2 border-gray-300 w-[277px]"
+                  onClick={() => setModalOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white w-[277px]"
+                >
+                  Add tier
+                </Button>
+              </div>
             </form>
           </div>
         </div>

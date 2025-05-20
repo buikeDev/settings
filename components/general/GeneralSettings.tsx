@@ -9,7 +9,8 @@ import EditProfileModal from "./EditProfileModal";
 
 export default function GeneralSettings() {
   const [profileData, setProfileData] = useState({
-    fullName: "Samuel Favour",
+    firstName: "Samuel",
+    lastName: "Favour",
     email: "samuelfavour120@gmail.com",
     phone: "(+234) 8066518279",
     role: "Super Admin",
@@ -26,11 +27,16 @@ export default function GeneralSettings() {
     setIsEditProfileOpen(false);
   };
 
+  const fullName = `${profileData.firstName} ${profileData.lastName}`;
+
   return (
     <div className="space-y-8 py-[32px] px-[27px] rounded-[12px]">
       <AvatarSection />
       <ProfileSettingsSection
-        profileData={profileData}
+        profileData={{
+          ...profileData,
+          fullName: `${profileData.firstName} ${profileData.lastName}`,
+        }}
         onEditClick={() => setIsEditProfileOpen(true)}
       />
       <UsageCreditSection

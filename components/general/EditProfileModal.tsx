@@ -4,24 +4,22 @@ import { useState } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue
+  SelectValue,
 } from "@/components/ui/select";
 
 interface ProfileData {
-  fullName: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   role: string;
@@ -41,86 +39,99 @@ export default function EditProfileModal({
   isOpen,
   onClose,
   profileData,
-  onSave
+  onSave,
 }: EditProfileModalProps) {
   const [formData, setFormData] = useState(profileData);
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
-  
+
   const handleSelectChange = (name: string, value: string) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
-  
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave(formData);
   };
-  
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px]">
+      <DialogContent className="sm:max-w-[600px]">
         <form onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle>Edit Profile</DialogTitle>
-            <DialogDescription>
-              Update your profile information. Click save when you're done.
-            </DialogDescription>
+          <DialogHeader className="mb-4">
+            <DialogTitle className="text-xl font-semibold">
+              Edit profile
+            </DialogTitle>
           </DialogHeader>
-          
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="fullName" className="text-right">
-                Full name
-              </Label>
-              <Input
-                id="fullName"
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleChange}
-                className="col-span-3"
-              />
+
+          <div className="space-y-6">
+            {/* First Name & Last Name Row */}
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  First name
+                </label>
+                <Input
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  className="w-full"
+                />
+              </div>
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Last name
+                </label>
+                <Input
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  className="w-full"
+                />
+              </div>
             </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="email" className="text-right">
-                Email
-              </Label>
+
+            {/* Email */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email address
+              </label>
               <Input
-                id="email"
                 name="email"
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="col-span-3"
+                className="w-full"
               />
             </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="phone" className="text-right">
-                Phone
-              </Label>
+
+            {/* Phone */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Phone number
+              </label>
               <Input
-                id="phone"
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className="col-span-3"
+                className="w-full"
               />
             </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="role" className="text-right">
+
+            {/* Role */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Role
-              </Label>
-              <Select 
-                value={formData.role} 
+              </label>
+              <Select
+                value={formData.role}
                 onValueChange={(value) => handleSelectChange("role", value)}
               >
-                <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Select role" />
+                <SelectTrigger className="w-full">
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="Super Admin">Super Admin</SelectItem>
@@ -130,17 +141,18 @@ export default function EditProfileModal({
                 </SelectContent>
               </Select>
             </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="language" className="text-right">
+
+            {/* Language */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Language
-              </Label>
-              <Select 
-                value={formData.language} 
+              </label>
+              <Select
+                value={formData.language}
                 onValueChange={(value) => handleSelectChange("language", value)}
               >
-                <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Select language" />
+                <SelectTrigger className="w-full">
+                  <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="English">English</SelectItem>
@@ -150,56 +162,74 @@ export default function EditProfileModal({
                 </SelectContent>
               </Select>
             </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="country" className="text-right">
-                Country
-              </Label>
-              <Select 
-                value={formData.country} 
-                onValueChange={(value) => handleSelectChange("country", value)}
-              >
-                <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Select country" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Nigeria">Nigeria</SelectItem>
-                  <SelectItem value="United States">United States</SelectItem>
-                  <SelectItem value="United Kingdom">United Kingdom</SelectItem>
-                  <SelectItem value="Canada">Canada</SelectItem>
-                  <SelectItem value="Australia">Australia</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="timezone" className="text-right">
-                Timezone
-              </Label>
-              <Select 
-                value={formData.timezone} 
-                onValueChange={(value) => handleSelectChange("timezone", value)}
-              >
-                <SelectTrigger className="col-span-3">
-                  <SelectValue placeholder="Select timezone" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="GMT+1 (Lagos)">GMT+1 (Lagos)</SelectItem>
-                  <SelectItem value="GMT-5 (EST)">GMT-5 (EST)</SelectItem>
-                  <SelectItem value="GMT-8 (PST)">GMT-8 (PST)</SelectItem>
-                  <SelectItem value="GMT+0 (London)">GMT+0 (London)</SelectItem>
-                  <SelectItem value="GMT+8 (Singapore)">GMT+8 (Singapore)</SelectItem>
-                </SelectContent>
-              </Select>
+
+            {/* Country & Timezone Row */}
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Country
+                </label>
+                <Select
+                  value={formData.country}
+                  onValueChange={(value) =>
+                    handleSelectChange("country", value)
+                  }
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Nigeria">Nigeria</SelectItem>
+                    <SelectItem value="United States">United States</SelectItem>
+                    <SelectItem value="United Kingdom">
+                      United Kingdom
+                    </SelectItem>
+                    <SelectItem value="Canada">Canada</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex-1">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Timezone
+                </label>
+                <Select
+                  value={formData.timezone}
+                  onValueChange={(value) =>
+                    handleSelectChange("timezone", value)
+                  }
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="GMT+1 (Lagos)">GMT+1 (Lagos)</SelectItem>
+                    <SelectItem value="GMT-5 (EST)">GMT-5 (EST)</SelectItem>
+                    <SelectItem value="GMT-8 (PST)">GMT-8 (PST)</SelectItem>
+                    <SelectItem value="GMT+0 (London)">
+                      GMT+0 (London)
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
-          
-          <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+
+          <div className="flex justify-end gap-3 mt-8">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              className="px-6"
+            >
               Cancel
             </Button>
-            <Button type="submit">Save changes</Button>
-          </DialogFooter>
+            <Button
+              type="submit"
+              className="px-6 bg-blue-600 hover:bg-blue-700"
+            >
+              Save edit
+            </Button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>
